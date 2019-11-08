@@ -16,36 +16,34 @@
                 </b-form-group>
               </b-col>
             </b-form-row>
-            <b-form-row>
-              <b-form-group label="Title" description="Provide the name of the product.">
-                <b-form-input name="title" v-model="title.title"/>
-              </b-form-group>
-              <b-form-group label="Product Owners" description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product.">
-                <b-list-group>
-                  <b-list-group-item v-for="(_, i) in title.productOwners" :key="i">
-                    <b-form-row>
-                      <b-col>
-                        <b-form-input v-model="title.productOwners[i].name" placeholder="Name..." title="name"/>
-                      </b-col>
-                      <b-col>
-                        <b-form-input v-model="title.productOwners[i].email" type="email" placeholder="Email..." title="email"/>
-                      </b-col>
-                      <b-col>
-                        <b-form-input v-model="title.productOwners[i].phone" type="tel" placeholder="Phone..." title="phone"/>
-                      </b-col>
-                      <div class="srs-center">
-                        <b-badge href="#" variant="danger" title="remove" @click="() => title.productOwners.splice(i, 1)">&minus;</b-badge>
-                      </div>
-                    </b-form-row>
-                  </b-list-group-item>
-                </b-list-group>
-              </b-form-group>
-            </b-form-row>
+            <b-form-group label="Title" description="Provide the name of the product.">
+              <b-form-input name="title" v-model="title.title"/>
+            </b-form-group>
+            <b-form-group label="Product Owners" description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product.">
+              <b-list-group>
+                <b-list-group-item v-for="(_, i) in title.productOwners" :key="i">
+                  <b-form-row>
+                    <b-col>
+                      <b-form-input v-model="title.productOwners[i].name" placeholder="Name..." title="name"/>
+                    </b-col>
+                    <b-col>
+                      <b-form-input v-model="title.productOwners[i].email" type="email" placeholder="Email..." title="email"/>
+                    </b-col>
+                    <b-col>
+                      <b-form-input v-model="title.productOwners[i].phone" type="tel" placeholder="Phone..." title="phone"/>
+                    </b-col>
+                    <div class="srs-center">
+                      <b-badge href="#" variant="danger" title="remove" @click="() => title.productOwners.splice(i, 1)">&minus;</b-badge>
+                    </div>
+                  </b-form-row>
+                </b-list-group-item>
+              </b-list-group>
+            </b-form-group>
           </b-form>
         </b-tab>
         <b-tab title="Summary">
           <b-form>
-            <b-form-group label="Product Perspective" description="Describe the context and origin of the product being specified in this SRS For example, state whether this product is a follow-on member of a product family, a replacement for certain existing systems, or a new, self-contained product. If the SRS defines a component of a larger system, relate the requirements of the larger system to the functionality of this software and identify interfaces between the two A simple diagram that shows the major components of the overall system, subsystem interconnections, and external interfaces can be helpful.">
+            <b-form-group label="Product Perspective" description="Describe the context and origin of the product being specified in this SRS For example, state whether this product is a follow-on member of a product family, a replacement for certain existing systems, or a new, self-contained product. If the SRS defines a component of a larger system, relate the requirements of the larger system to the functionality of this software and identify interfaces between the two.">
               <b-textarea v-model="summary.perspective"></b-textarea>
             </b-form-group>
             <b-form-group label="Product Functions" description="Summarize the major functions the product must perform or must let the user perform.">
@@ -65,16 +63,29 @@
                     <b-badge class="mt-3" href="#" variant="danger" @click="() => summary.functions.splice(i, 1)">&minus;</b-badge>
                   </div>
                 </b-form-row>
+                <b-form-group label="1-Sentence Description">
+                  <b-form-input v-model="summary.functions[i].description"></b-form-input>
+                </b-form-group>
+                <b-form-group label="Details">
+                  <b-textarea v-model="summary.functions[i].details"></b-textarea>
+                </b-form-group>
+              </b-list-group-item>
+            </b-form-group>
+            <b-form-group label="Product Users" description="Describe the pertinent characteristics of each user class. Certain requirements may pertain only to certain user classes. Distinguish the most important user classes for this product from those who are less important to satisfy.">
+              <b-list-group-item v-for="({priority}, i) in summary.users" :key="i" :style="`background-color: rgba(255, 25, 25, ${priority / summaryMaxPriority});`">
                 <b-form-row>
-                  <b-form-group label="1-Sentence Description">
-                    <b-form-input v-model="summary.functions[i].description"></b-form-input>
-                  </b-form-group>
+                  <b-col>
+                    <b-form-group label="Classification">
+                      <b-form-input v-model="summary.users[i].classification"></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                  <div class="srs-center">
+                    <b-badge class="mt-3" href="#" variant="danger" @click="() => summary.users.splice(i, 1)">&minus;</b-badge>
+                  </div>
                 </b-form-row>
-                <b-form-row>
-                  <b-form-group label="Details">
-                    <b-textarea v-model="summary.functions[i].details"></b-textarea>
-                  </b-form-group>
-                </b-form-row>
+                <b-form-group label="Description">
+                  <b-textarea v-model="summary.users[i].description"></b-textarea>
+                </b-form-group>
               </b-list-group-item>
             </b-form-group>
           </b-form>
@@ -85,6 +96,19 @@
 </template>
 
 <script>
+  function watchExpandingList (idProp, prototype) {
+    return {
+      deep: true,
+      immediate: true,
+      handler (value) {
+        const length = value.length
+        if (length < 1 || value[length - 1][idProp]) {
+          value.push({ ...prototype })
+        }
+      }
+    }
+  }
+
   export default {
     name: 'app',
     data () {
@@ -107,7 +131,8 @@
         },
         summary: {
           perspective: '',
-          functions: []
+          functions: [],
+          users: []
         }
       }
     },
@@ -119,35 +144,21 @@
       }
     },
     watch: {
-      'title.productOwners': {
-        deep: true,
-        immediate: true,
-        handler: function (value) {
-          const length = value.length
-          if (length < 1 || value[length - 1].name) {
-            value.push({
-              name: '',
-              email: '',
-              phone: '',
-            })
-          }
-        }
-      },
-      'summary.functions': {
-        deep: true,
-        immediate: true,
-        handler: function (value) {
-          const length = value.length
-          if (length < 1 || value[length - 1].description) {
-            value.push({
-              support: 1,
-              priority: 0,
-              description: '',
-              details: ''
-            })
-          }
-        }
-      }
+      'title.productOwners': watchExpandingList('name', {
+        name: '',
+        email: '',
+        phone: '',
+      }),
+      'summary.functions': watchExpandingList('description', {
+        support: 1,
+        priority: 0,
+        description: '',
+        details: ''
+      }),
+      'summary.users': watchExpandingList('classification', {
+        classification: '',
+        description: ''
+      })
     }
   }
 </script>
