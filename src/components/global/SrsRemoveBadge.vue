@@ -1,6 +1,6 @@
 <template>
   <div class="srs-center">
-    <b-badge href="#" variant="danger" @click="click">&minus;</b-badge>
+    <b-badge tabindex="-1" href="#" variant="danger" @click="click">&minus;</b-badge>
   </div>
 </template>
 
