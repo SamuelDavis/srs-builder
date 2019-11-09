@@ -15,8 +15,8 @@
     <b-form-group label="Title" description="Provide the name of the product.">
       <b-form-input name="title" v-model="data.title"/>
     </b-form-group>
-    <b-form-group label="Product Owners" description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product.">
-      <b-list-group>
+    <srs-input-group label="Product Owners" description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product.">
+      <b-list-group flush>
         <b-list-group-item v-for="(_, i) in data.productOwners" :key="i">
           <b-form-row>
             <b-col>
@@ -28,13 +28,11 @@
             <b-col>
               <b-form-input v-model="data.productOwners[i].phone" type="tel" placeholder="Phone..." title="phone"/>
             </b-col>
-            <div class="srs-center">
-              <b-badge href="#" variant="danger" title="remove" @click="() => data.productOwners.splice(i, 1)">&minus;</b-badge>
-            </div>
+            <srs-remove-badge :click="() => data.productOwners.splice(i, 1)"/>
           </b-form-row>
         </b-list-group-item>
       </b-list-group>
-    </b-form-group>
+    </srs-input-group>
   </b-form>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <b-container id="app" class="mt-5">
     <b-card no-body>
-      <b-tabs card vertical pills>
+      <b-tabs card>
         <b-tab title="Title">
           <srs-title/>
         </b-tab>
