@@ -8,6 +8,7 @@
 <script>
   import SrsEditor from './components/SrsEditor.vue'
   import SrsRenderer from './components/SrsRenderer.vue'
+  import { getters, mutations } from './store'
 
   export default {
     name: 'app',
@@ -19,9 +20,14 @@
       window.addEventListener('beforeprint', () => this.printing = true)
       window.addEventListener('afterprint', () => this.printing = false)
     },
-    data () {
-      return {
-        printing: false
+    computed: {
+      printing: {
+        get () {
+          return this.$store.getters[getters.getPrinting.name]
+        },
+        set (v) {
+          return this.$store.commit(mutations.setPrinting.name, v)
+        }
       }
     }
   }
