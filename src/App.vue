@@ -1,6 +1,7 @@
 <template>
   <b-container id="app" class="mt-5">
-    <b-card no-body>
+    <h1 v-if="printing">Hello, world!</h1>
+    <b-card no-body v-show="!printing">
       <b-tabs card>
         <b-tab title="Title">
           <srs-title/>
@@ -27,6 +28,15 @@
       'srs-title': SrsTitle,
       'srs-summary': SrsSummary,
       'srs-stories': SrsStories
+    },
+    mounted () {
+      window.addEventListener('beforeprint', () => this.printing = true)
+      window.addEventListener('afterprint', () => this.printing = false)
+    },
+    data () {
+      return {
+        printing: false
+      }
     }
   }
 </script>
