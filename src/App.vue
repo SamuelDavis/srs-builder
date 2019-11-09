@@ -1,5 +1,5 @@
 <template>
-  <b-container id="app" class="mt-5">
+  <b-container class="mt-5" id="app">
     <srs-editor v-show="!printing"/>
     <srs-renderer v-if="printing"/>
   </b-container>
@@ -8,7 +8,7 @@
 <script>
   import SrsEditor from './components/SrsEditor.vue'
   import SrsRenderer from './components/SrsRenderer.vue'
-  import { getters, mutations } from './store'
+  import { mapProp } from './store'
 
   export default {
     name: 'app',
@@ -21,14 +21,7 @@
       window.addEventListener('afterprint', () => this.printing = false)
     },
     computed: {
-      printing: {
-        get () {
-          return this.$store.getters[getters.getPrinting.name]
-        },
-        set (v) {
-          return this.$store.commit(mutations.setPrinting.name, v)
-        }
-      }
+      printing: mapProp('printing')
     }
   }
 </script>

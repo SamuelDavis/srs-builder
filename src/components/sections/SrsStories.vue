@@ -1,24 +1,24 @@
 <template>
   <b-form>
-    <srs-input-group label="User Stories" description="This template illustrates organizing the functional requirements for the product by system features, the major services provided by the product.">
+    <srs-input-group description="This template illustrates organizing the functional requirements for the product by system features, the major services provided by the product." label="User Stories">
       <b-list-group flush>
-        <b-list-group-item v-for="(_, i) in data.stories" :key="i">
+        <b-list-group-item :key="i" v-for="(_, i) in stories">
           <b-form-row>
             <b-col>
-              <b-form-group label="In order to..." description="These options are supplied from the Summary section's Functions.">
-                <b-select v-model="data.stories[i].description" :options="meta.descriptions">
+              <b-form-group description="These options are supplied from the Summary section's Functions." label="In order to...">
+                <b-select :options="functionDescriptions" v-model="stories[i].description">
                   <template v-slot:first>
                     <option :value="null">...</option>
                   </template>
                 </b-select>
               </b-form-group>
             </b-col>
-            <srs-remove-badge :click="() => data.stories.splice(i, 1)"/>
+            <srs-remove-badge :click="() => stories.splice(i, 1)"/>
           </b-form-row>
           <b-form-row>
             <b-col>
-              <b-form-group label="As a..." description="These options are supplied from the Summary section's Users">
-                <b-select v-model="data.stories[i].user" :options="meta.users">
+              <b-form-group description="These options are supplied from the Summary section's Users" label="As a...">
+                <b-select :options="userClasses" v-model="stories[i].user">
                   <template v-slot:first>
                     <option :value="null">...</option>
                   </template>
@@ -28,14 +28,14 @@
           </b-form-row>
           <b-form-group class="mb-0" label="I do the following...">
             <ol>
-              <li v-for="(_, j) in data.stories[i].steps" :key="j" :class="{'mb-2': j < data.stories[i].steps.length - 1}">
+              <li :class="{'mb-2': j < stories[i].steps.length - 1}" :key="j" v-for="(_, j) in stories[i].steps">
                 <b-form-row>
                   <b-col>
                     <b-form-group class="mb-0">
-                      <b-textarea v-model="data.stories[i].steps[j]"></b-textarea>
+                      <b-textarea v-model="stories[i].steps[j]"/>
                     </b-form-group>
                   </b-col>
-                  <srs-remove-badge :click="() => data.stories[i].steps.splice(j, 1)"/>
+                  <srs-remove-badge :click="() => stories[i].steps.splice(j, 1)"/>
                 </b-form-row>
               </li>
             </ol>
@@ -47,39 +47,14 @@
 </template>
 
 <script>
+  import { mapProp } from '../../store'
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'srs-stories',
-    data () {
-      return {
-        meta: {
-          descriptions: ['foo', 'bar', 'thud'],
-          users: ['fiz', 'baz', 'grunt']
-        },
-        data: {
-          stories: []
-        }
-      }
-    },
-    watch: {
-      'data.stories': {
-        immediate: true,
-        deep: true,
-        handler (value) {
-          if (value.length < 1 || value[value.length - 1].description) {
-            value.push({
-              description: null,
-              user: null,
-              steps: []
-            })
-          }
-
-          value.forEach((story) => {
-            if (story.steps.length < 1 || story.steps[story.steps.length - 1]) {
-              story.steps.push(null)
-            }
-          })
-        }
-      }
+    computed: {
+      ...mapGetters(['functionDescriptions', 'userClasses']),
+      stories: mapProp('doc.stories'),
     }
   }
 </script>

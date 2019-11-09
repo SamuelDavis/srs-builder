@@ -3,32 +3,32 @@
     <b-form-row>
       <b-col>
         <b-form-group label="Created At">
-          <b-form-input :value="meta.createdAt.toString()" readonly/>
+          <b-form-input :value="createdAt.toString()" readonly/>
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group label="Updated At">
-          <b-form-input :value="meta.updatedAt.toString()" readonly/>
+          <b-form-input :value="updatedAt.toString()" readonly/>
         </b-form-group>
       </b-col>
     </b-form-row>
-    <b-form-group label="Title" description="Provide the name of the product.">
-      <b-form-input name="title" v-model="data.title"/>
+    <b-form-group description="Provide the name of the product." label="Title">
+      <b-form-input name="title" v-model="title"/>
     </b-form-group>
-    <srs-input-group label="Product Owners" description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product.">
+    <srs-input-group description="Provide the names and contact information for any persons who can speak authoritatively about the requirements of the product." label="Product Owners">
       <b-list-group flush>
-        <b-list-group-item v-for="(_, i) in data.productOwners" :key="i">
+        <b-list-group-item :key="i" v-for="(_, i) in owners">
           <b-form-row>
             <b-col>
-              <b-form-input v-model="data.productOwners[i].name" placeholder="Name..." title="name"/>
+              <b-form-input placeholder="Name..." title="name" v-model="owners[i].name"/>
             </b-col>
             <b-col>
-              <b-form-input v-model="data.productOwners[i].email" type="email" placeholder="Email..." title="email"/>
+              <b-form-input placeholder="Email..." title="email" type="email" v-model="owners[i].email"/>
             </b-col>
             <b-col>
-              <b-form-input v-model="data.productOwners[i].phone" type="tel" placeholder="Phone..." title="phone"/>
+              <b-form-input placeholder="Phone..." title="phone" type="tel" v-model="owners[i].phone"/>
             </b-col>
-            <srs-remove-badge :click="() => data.productOwners.splice(i, 1)"/>
+            <srs-remove-badge :click="() => owners.splice(i, 1)"/>
           </b-form-row>
         </b-list-group-item>
       </b-list-group>
@@ -37,28 +37,15 @@
 </template>
 
 <script>
-  import { watchExpandingList } from '../../util.js'
+  import { mapProp } from '../../store'
 
   export default {
     name: 'srs-title',
-    data () {
-      return {
-        meta: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        data: {
-          title: '',
-          productOwners: []
-        }
-      }
-    },
-    watch: {
-      'data.productOwners': watchExpandingList('name', {
-        name: '',
-        email: '',
-        phone: '',
-      }),
+    computed: {
+      createdAt: mapProp('doc.createdAt'),
+      updatedAt: mapProp('doc.updatedAt'),
+      title: mapProp('doc.title'),
+      owners: mapProp('doc.owners'),
     }
   }
 </script>

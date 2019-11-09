@@ -1,9 +1,14 @@
 <template>
-  <h1>Hello, world</h1>
+  <pre v-text="doc"/>
 </template>
 
 <script>
+  import { mapProp } from '../store'
+
   export default {
-    name: 'srs-renderer'
+    name: 'srs-renderer',
+    computed: {
+      doc: mapProp('doc')
+    }
   }
 </script>
