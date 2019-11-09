@@ -2,7 +2,7 @@
   <b-container id="app" class="mt-5">
     <h1 v-if="printing">Hello, world!</h1>
     <b-card no-body v-show="!printing">
-      <b-tabs card>
+      <b-tabs card justified>
         <b-tab title="Title">
           <srs-title/>
         </b-tab>
@@ -11,6 +11,9 @@
         </b-tab>
         <b-tab title="Stories">
           <srs-stories/>
+        </b-tab>
+        <b-tab title="Requirements">
+          <srs-requirements/>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -21,13 +24,15 @@
   import SrsTitle from './components/sections/SrsTitle.vue'
   import SrsSummary from './components/sections/SrsSummary.vue'
   import SrsStories from './components/sections/SrsStories.vue'
+  import SrsRequirements from './components/sections/SrsRequirements.vue'
 
   export default {
     name: 'app',
     components: {
       'srs-title': SrsTitle,
       'srs-summary': SrsSummary,
-      'srs-stories': SrsStories
+      'srs-stories': SrsStories,
+      'srs-requirements': SrsRequirements
     },
     mounted () {
       window.addEventListener('beforeprint', () => this.printing = true)
