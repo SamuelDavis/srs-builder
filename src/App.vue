@@ -1,38 +1,19 @@
 <template>
   <b-container id="app" class="mt-5">
-    <h1 v-if="printing">Hello, world!</h1>
-    <b-card no-body v-show="!printing">
-      <b-tabs card justified>
-        <b-tab title="Title">
-          <srs-title/>
-        </b-tab>
-        <b-tab title="Summary">
-          <srs-summary/>
-        </b-tab>
-        <b-tab title="Stories">
-          <srs-stories/>
-        </b-tab>
-        <b-tab title="Requirements">
-          <srs-requirements/>
-        </b-tab>
-      </b-tabs>
-    </b-card>
+    <srs-editor v-show="!printing"/>
+    <srs-renderer v-if="printing"/>
   </b-container>
 </template>
 
 <script>
-  import SrsTitle from './components/sections/SrsTitle.vue'
-  import SrsSummary from './components/sections/SrsSummary.vue'
-  import SrsStories from './components/sections/SrsStories.vue'
-  import SrsRequirements from './components/sections/SrsRequirements.vue'
+  import SrsEditor from './components/SrsEditor.vue'
+  import SrsRenderer from './components/SrsRenderer.vue'
 
   export default {
     name: 'app',
     components: {
-      'srs-title': SrsTitle,
-      'srs-summary': SrsSummary,
-      'srs-stories': SrsStories,
-      'srs-requirements': SrsRequirements
+      'srs-editor': SrsEditor,
+      'srs-renderer': SrsRenderer
     },
     mounted () {
       window.addEventListener('beforeprint', () => this.printing = true)
