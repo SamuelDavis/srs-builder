@@ -92,9 +92,14 @@
         <srs-input-group label="Assumptions" description="List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. The project could be affected if these assumptions are incorrect, are not shared, or change.">
           <b-list-group flush>
             <b-list-group-item v-for="(_, i) in data.assumptions" :key="i">
-              <b-form-group>
-                <b-textarea v-model="data.assumptions[i]"></b-textarea>
-              </b-form-group>
+              <b-form-row>
+                <b-col>
+                  <b-form-group class="mb-0">
+                    <b-textarea v-model="data.assumptions[i]"></b-textarea>
+                  </b-form-group>
+                </b-col>
+                <srs-remove-badge :click="() => data.assumptions.splice(i, 1)"></srs-remove-badge>
+              </b-form-row>
             </b-list-group-item>
           </b-list-group>
         </srs-input-group>
