@@ -18,9 +18,9 @@
 </template>
 
 <script>
-  import SrsTitle from './components/SrsTitle.vue'
-  import SrsSummary from './components/SrsSummary.vue'
-  import SrsStories from './components/SrsStories.vue'
+  import SrsTitle from './components/sections/SrsTitle.vue'
+  import SrsSummary from './components/sections/SrsSummary.vue'
+  import SrsStories from './components/sections/SrsStories.vue'
 
   export default {
     name: 'app',

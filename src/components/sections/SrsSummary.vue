@@ -128,7 +128,7 @@
 </template>
 
 <script>
-  import { watchExpandingList } from '../util.js'
+  import { watchExpandingList } from '../../util.js'
 
   export default {
     name: 'srs-summary',
